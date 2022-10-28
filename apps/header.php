@@ -31,48 +31,30 @@
     </nav> 
 	</header>
 
-  <main class="bg-light">
+    <main class="bg-light">
     <div class="jumbotron">
       <div class="container">
-        <h1>IT Career Path Certifications :)</h1>
-        <p>A tool to help information systems majors find certification and career information!</p> 
-      </div>
-    </div>
-
-    <div class="container py-5">
-      <div class="row">
         <?php
-          // File with stored db credentials
+          // PHP section to set up initial page information
           include('../db_credentials.php');
 
           // Create connection
           $conn = new mysqli('localhost', $user, $password, $database);
-
-          // Query to get career path button information
-          $sql = "SELECT * FROM CAREER";
+          
+          // Query to get career path button information from user input on home page
+          $sql = "SELECT * FROM CAREER WHERE career_ID =" . $_GET['id'] . ";";
           $result = $conn->query($sql);
-
-          // Create path buttons from career table
+          
           if ($result->num_rows > 0) {
-            // output data of each row
-            while($row = $result->fetch_assoc()) {
+              // output data of each row
+              while($row = $result->fetch_assoc()) {
               echo '
-                <div class="card" style="width: 18rem;">
-                  <div class="card-body">
-                    <h5 class="card-title">' . $row["career_Name"] . '</h5>
-                    <p class="card-text">' . $row["career_Description"] . '</p>
-                    <a href="career_listing.php?id= ' . $row["career_ID"] . '" class="btn btn-primary">Careers</a>
-                    <a href="cert_listing.php?id= ' . $row["career_ID"] . '" class="btn btn-secondary">Certifications</a>
-                  </div>
-                </div>
-            ';
-            }
-          } 
-          $conn->close();
-        ?>
+                <h1>' . $row["career_Name"] . '</h1>
+                <p>' . $row["career_Description"] . '</p>
+              ';
+              }
+            } 
+            $conn->close();
+          ?>
       </div>
     </div>
-  </main>
-<?php
-include("footer.php");
-?>
